@@ -1,17 +1,17 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { NgModule, Input,Component, OnInit } from '@angular/core';
-
- export class Movie {
-  public title: string;
-  public image: string;
+import { Input, Component, OnInit, OnDestroy } from '@angular/core';
+import { MovieService } from '../../Services/Movie/movie.service'
+import { Subscription } from 'rxjs';
+export class Movie {
+  public original_title: string;
+  public poster_path: string;
   public overview: string;
-  public averageRatings: number;
+  public vote_average: number;
 
-  constructor(title: string, image: string, overview: string, averageRatings: number) {
-    this.title = title;
-    this.image = image;
+  constructor(original_title: string, poster_path: string, overview: string, vote_average: number) {
+    this.original_title = original_title;
+    this.poster_path = poster_path;
     this.overview = overview;
-    this.averageRatings = averageRatings;
+    this.vote_average = vote_average;
   }
 }
 
@@ -20,8 +20,8 @@ import { NgModule, Input,Component, OnInit } from '@angular/core';
   templateUrl: './movie.component.html',
   styleUrls: ['./movie.component.css']
 })
-export class MovieComponent  {
-  @Input('movie') data! :Movie;
+export class MovieComponent {
+  @Input('movie') data!: Movie;
 }
 
 @Component({
@@ -30,15 +30,25 @@ export class MovieComponent  {
   <movie *ngFor="let j of movies" [movie]="j"></movie>
     `
 })
-export class MovieListComponent {
-  movies: Movie[];
+export class MovieListComponent implements OnInit, OnDestroy {
+  movies: Movie[] = [];
+  sub!: Subscription;
+  errorMessage = '';
 
-  constructor() {
-    this.movies = [
-      new Movie("What did the cheese say when it looked in the mirror?", "Hello-me (Halloumi)", "vgebb", 78),
-      new Movie("What kind of cheese do you use to disguise a small horse?", "Mask-a-pony (Mascarpone)", "vgebb", 78),
-      new Movie("A kid threw a lump of cheddar at me", "I thought ‘That’s not very mature’", "vgebb", 78),
-    ];
+
+  constructor(private movieService: MovieService) { }
+
+  ngOnInit(): void {
+    this.sub = this.movieService.getMovies().subscribe({
+      next: (movie: any[]) => {
+        this.movies = movie;
+      },
+      error: (err: string) => this.errorMessage = err
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }
 
