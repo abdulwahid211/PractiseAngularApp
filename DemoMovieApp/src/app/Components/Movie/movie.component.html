@@ -1,6 +1,6 @@
-<div class="movie-profile">
-    <h4 class="movie-title">Title: {{data.original_title}}</h4>
-    <img class="movie-image" src="https://image.tmdb.org/t/p/w500/{{data.poster_path}}" />
-    <h4 class="movie-overview ">Overview: {{data.overview}}</h4>
-    <h4 class="movie-overview ">Vote: {{data.vote_average}}</h4>
+<div class="movie-items">
+    <a [routerLink]="['/movie', data.id]">
+        <h4 class="movie-title">{{data.original_title}}</h4>
+        <img class="movie-image" src="https://image.tmdb.org/t/p/w500/{{data.poster_path}}" />
+    </a>
 </div>

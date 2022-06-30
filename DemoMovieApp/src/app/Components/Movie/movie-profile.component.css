@@ -1,0 +1,13 @@
+.movie-profile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    gap: 10px;
+}
+
+#movie-title-profile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
